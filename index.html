@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 增肌減脂極限挑戰賽</title>
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --card: #14141f;
+            --card-border: #2a2a3a;
+            --text: #e0e0e8;
+            --text-dim: #8888a0;
+            --green: #00ff88;
+            --green-dim: #00cc6a;
+            --red: #ff4466;
+            --orange: #ff8844;
+            --gold: #ffd700;
+            --blue: #4488ff;
+            --purple: #aa66ff;
+            --pink: #ff66aa;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: var(--bg); color: var(--text); line-height: 1.7;
+        }
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+        /* Hero */
+        .hero {
+            text-align: center; padding: 80px 24px 60px;
+            background: linear-gradient(180deg, #0f0f1a 0%, var(--bg) 100%);
+            border-bottom: 1px solid var(--card-border);
+        }
+        .hero h1 { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 800; color: var(--text); margin-bottom: 12px; }
+        .hero .subtitle { font-size: 1.1rem; color: var(--text-dim); margin-bottom: 20px; }
+        .hero .desc { font-size: 0.95rem; color: var(--text-dim); max-width: 650px; margin: 0 auto; }
+
+        /* Sections */
+        section { padding: 60px 0; }
+        .section-title { font-size: 1.6rem; font-weight: 700; margin-bottom: 32px; text-align: center; }
+        .section-title span { color: var(--gold); }
+
+        /* Rule Cards */
+        .rules-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .rule-card { background: var(--card); border: 1px solid var(--card-border); border-radius: 16px; padding: 28px; }
+        .rule-card h3 { font-size: 1.15rem; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+        .rule-card h3 .icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+        .icon-muscle { background: rgba(0,255,136,0.15); }
+        .icon-fat { background: rgba(255,68,102,0.15); }
+        .icon-formula { background: rgba(255,215,0,0.15); }
+
+        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        th, td { padding: 10px 12px; text-align: center; border-bottom: 1px solid var(--card-border); }
+        th { color: var(--text-dim); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        .col-male { color: var(--blue); }
+        .col-female { color: var(--pink); }
+        .weight-badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-weight: 700; font-size: 0.85rem; }
+        .w-1 { background: rgba(68,136,255,0.2); color: var(--blue); }
+        .w-15 { background: rgba(170,102,255,0.2); color: var(--purple); }
+        .w-18 { background: rgba(255,136,68,0.2); color: var(--orange); }
+        .w-2 { background: rgba(255,68,102,0.2); color: var(--red); }
+
+        .formula-box { background: rgba(255,215,0,0.08); border: 1px solid rgba(255,215,0,0.25); border-radius: 12px; padding: 24px; text-align: center; margin-top: 12px; }
+        .formula-box .formula { font-size: 1.3rem; font-weight: 700; color: var(--gold); font-family: "SF Mono", "Fira Code", monospace; }
+        .formula-box .note { font-size: 0.85rem; color: var(--text-dim); margin-top: 8px; }
+
+        .segment-note { background: rgba(170,102,255,0.08); border: 1px solid rgba(170,102,255,0.25); border-radius: 12px; padding: 16px 20px; margin-top: 20px; font-size: 0.88rem; color: var(--text-dim); line-height: 1.8; }
+        .segment-note strong { color: var(--purple); }
+
+        /* Calculator */
+        .calc-section { background: linear-gradient(180deg, rgba(0,255,136,0.03) 0%, transparent 100%); }
+        .calc-wrapper { background: var(--card); border: 1px solid var(--card-border); border-radius: 20px; padding: 36px; }
+        .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; }
+        @media (max-width: 700px) { .calc-grid { grid-template-columns: 1fr; } }
+        .input-group { margin-bottom: 18px; }
+        .input-group label { display: block; font-size: 0.85rem; color: var(--text-dim); margin-bottom: 6px; font-weight: 500; }
+        .input-group input[type="text"], .input-group input[type="number"] { width: 100%; padding: 12px 16px; background: rgba(255,255,255,0.05); border: 1px solid var(--card-border); border-radius: 10px; color: var(--text); font-size: 1rem; outline: none; transition: border-color 0.2s; }
+        .input-group input:focus { border-color: var(--green); }
+        .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .input-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+        .divider { border: none; border-top: 1px dashed var(--card-border); margin: 20px 0; }
+
+        .gender-toggle { display: flex; gap: 8px; margin-bottom: 18px; }
+        .gender-btn { cursor: pointer; }
+        .gender-btn input { display: none; }
+        .gender-btn span { display: inline-block; padding: 10px 24px; border-radius: 10px; border: 1px solid var(--card-border); color: var(--text-dim); font-size: 0.95rem; font-weight: 600; transition: all 0.2s; }
+        .gender-btn input:checked + span.male-label { border-color: var(--blue); color: var(--blue); background: rgba(68,136,255,0.1); }
+        .gender-btn input:checked + span.female-label { border-color: var(--pink); color: var(--pink); background: rgba(255,102,170,0.1); }
+
+        .result-panel { display: flex; flex-direction: column; gap: 14px; }
+        .result-card { background: rgba(255,255,255,0.03); border: 1px solid var(--card-border); border-radius: 12px; padding: 14px 18px; }
+        .result-card .label { font-size: 0.8rem; color: var(--text-dim); margin-bottom: 4px; }
+        .result-card .value { font-size: 1.3rem; font-weight: 700; }
+        .result-card .detail { font-size: 0.8rem; color: var(--text-dim); margin-top: 4px; }
+        .seg-line { font-family: "SF Mono", "Fira Code", monospace; font-size: 0.82rem; line-height: 1.9; color: var(--text-dim); }
+        .seg-line .amt { color: var(--text); }
+        .seg-subtotal { font-weight: 700; font-size: 0.9rem; margin-top: 2px; }
+        .player-name { font-size: 1.1rem; font-weight: 600; color: var(--green); margin-bottom: 4px; }
+
+        .total-score { text-align: center; padding: 24px; background: rgba(255,215,0,0.06); border: 2px solid rgba(255,215,0,0.3); border-radius: 16px; }
+        .total-score .label { font-size: 0.9rem; color: var(--text-dim); }
+        .total-score .score { font-size: 3rem; font-weight: 800; color: var(--gold); font-family: "SF Mono", "Fira Code", monospace; }
+        .total-score .breakdown { font-size: 0.85rem; color: var(--text-dim); margin-top: 4px; font-family: "SF Mono", "Fira Code", monospace; }
+        .total-score.negative { border-color: rgba(255,68,102,0.4); background: rgba(255,68,102,0.06); }
+        .total-score.negative .score { color: var(--red); }
+
+        /* Examples */
+        .examples-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(480px, 1fr)); gap: 20px; }
+        @media (max-width: 520px) { .examples-grid { grid-template-columns: 1fr; } }
+        .example-card { background: var(--card); border: 1px solid var(--card-border); border-radius: 16px; padding: 24px; transition: transform 0.2s; }
+        .example-card:hover { transform: translateY(-2px); }
+        .example-card.warning { border-color: rgba(255,68,102,0.4); background: linear-gradient(180deg, rgba(255,68,102,0.05) 0%, var(--card) 40%); }
+        .example-card .tag { display: inline-block; padding: 3px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 600; margin-bottom: 12px; }
+        .tag-green { background: rgba(0,255,136,0.15); color: var(--green); }
+        .tag-blue { background: rgba(68,136,255,0.15); color: var(--blue); }
+        .tag-purple { background: rgba(170,102,255,0.15); color: var(--purple); }
+        .tag-red { background: rgba(255,68,102,0.15); color: var(--red); }
+        .tag-pink { background: rgba(255,102,170,0.15); color: var(--pink); }
+        .example-card h4 { font-size: 1.1rem; margin-bottom: 12px; }
+        .example-card .stats { font-size: 0.85rem; color: var(--text-dim); margin-bottom: 12px; }
+        .example-card .stats div { margin-bottom: 2px; }
+        .example-card .calc-detail { font-size: 0.82rem; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 8px; margin-bottom: 12px; font-family: "SF Mono", "Fira Code", monospace; line-height: 1.9; }
+        .example-card .final-score { font-size: 1.4rem; font-weight: 800; text-align: center; padding: 8px; }
+        .example-card .comment { font-size: 0.83rem; color: var(--text-dim); margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--card-border); line-height: 1.6; }
+        .score-pos { color: var(--green); }
+        .score-neg { color: var(--red); }
+
+        /* Footer */
+        footer { text-align: center; padding: 40px 24px; border-top: 1px solid var(--card-border); color: var(--text-dim); font-size: 0.85rem; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--card-border); border-radius: 4px; }
+    </style>
+</head>
+<body>
+
+    <!-- Hero -->
+    <header class="hero">
+        <h1>2026 增肌減脂極限挑戰賽</h1>
+        <p class="subtitle">階梯式加權計分法</p>
+        <p class="desc">依據初始體態決定增減重權重，越接近極限者每公斤積分越高。若數據流失或反彈，亦將依相同權重倒扣分數。男女採用不同門檻，確保公平競爭。</p>
+    </header>
+
+    <!-- Rules -->
+    <section>
+        <div class="container">
+            <h2 class="section-title">賽制與<span>計分規則</span></h2>
+            <div class="rules-grid">
+                <div class="rule-card">
+                    <h3><div class="icon icon-muscle">💪</div>肌肉階梯 Muscle Ladder</h3>
+                    <p style="font-size:0.85rem;color:var(--text-dim);margin-bottom:14px;">依據初始「骨骼肌量佔體重比例」分階，男女採用不同門檻</p>
+                    <table>
+                        <thead><tr><th></th><th class="col-male">♂ 男</th><th class="col-female">♀ 女</th><th>權重</th></tr></thead>
+                        <tbody>
+                            <tr><td>初階</td><td>&lt; 35%</td><td>&lt; 28%</td><td><span class="weight-badge w-1">1.0</span></td></tr>
+                            <tr><td>中階</td><td>35% ~ 40%</td><td>28% ~ 34%</td><td><span class="weight-badge w-15">1.5</span></td></tr>
+                            <tr><td>高階</td><td>≥ 40%</td><td>≥ 34%</td><td><span class="weight-badge w-2">2.0</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="rule-card">
+                    <h3><div class="icon icon-fat">🔥</div>脂肪階梯 Fat Ladder</h3>
+                    <p style="font-size:0.85rem;color:var(--text-dim);margin-bottom:14px;">依據初始「體脂率」分階，男女採用不同門檻</p>
+                    <table>
+                        <thead><tr><th></th><th class="col-male">♂ 男</th><th class="col-female">♀ 女</th><th>權重</th></tr></thead>
+                        <tbody>
+                            <tr><td>初階</td><td>≥ 25%</td><td>≥ 32%</td><td><span class="weight-badge w-1">1.0</span></td></tr>
+                            <tr><td>中階</td><td>20% ~ 25%</td><td>25% ~ 32%</td><td><span class="weight-badge w-15">1.5</span></td></tr>
+                            <tr><td>進階</td><td>15% ~ 20%</td><td>20% ~ 25%</td><td><span class="weight-badge w-18">1.8</span></td></tr>
+                            <tr><td>極限</td><td>&lt; 15%</td><td>&lt; 20%</td><td><span class="weight-badge w-2">2.0</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="rule-card">
+                    <h3><div class="icon icon-formula">⚡</div>終極平衡 Ultimate Balance</h3>
+                    <p style="font-size:0.85rem;color:var(--text-dim);margin-bottom:14px;">肌肉分數獲 4 倍加權，強調增肌核心精神</p>
+                    <div class="formula-box">
+                        <div class="formula">( 肌肉分 × 4 ) + 脂肪分</div>
+                        <div class="note">跨越門檻時分段計分，每段適用該區間的權重</div>
+                    </div>
+                </div>
+            </div>
+            <div class="segment-note">
+                <strong>分段算分機制：</strong>門檻以初始體重為基準，依性別對應不同百分比後換算成公斤數（例如男性 90kg 的 25% 門檻 = 22.5kg；女性 60kg 的 20% 門檻 = 12kg）。當脂肪或肌肉的變化量跨越門檻時，落在不同區間的公斤數各自乘以該區間的權重，最後加總。
+            </div>
+        </div>
+    </section>
+
+    <!-- Calculator -->
+    <section class="calc-section">
+        <div class="container">
+            <h2 class="section-title">積分<span>計算機</span></h2>
+            <div class="calc-wrapper">
+                <div class="calc-grid">
+                    <div>
+                        <div class="gender-toggle">
+                            <label class="gender-btn">
+                                <input type="radio" name="calcGender" value="M" checked onchange="calculate()">
+                                <span class="male-label">♂ 男</span>
+                            </label>
+                            <label class="gender-btn">
+                                <input type="radio" name="calcGender" value="F" onchange="calculate()">
+                                <span class="female-label">♀ 女</span>
+                            </label>
+                        </div>
+                        <div class="input-group">
+                            <label>姓名</label>
+                            <input type="text" id="calcName" placeholder="輸入參賽者姓名" oninput="calculate()">
+                        </div>
+                        <div class="input-row-3">
+                            <div class="input-group">
+                                <label>體重 (kg)</label>
+                                <input type="number" id="calcWeight" placeholder="70" step="0.1" oninput="calculate()">
+                            </div>
+                            <div class="input-group">
+                                <label>體脂率 (%)</label>
+                                <input type="number" id="calcFat" placeholder="20" step="0.1" oninput="calculate()">
+                            </div>
+                            <div class="input-group">
+                                <label>骨骼肌量 (kg)</label>
+                                <input type="number" id="calcMuscle" placeholder="30" step="0.1" oninput="calculate()">
+                            </div>
+                        </div>
+                        <hr class="divider">
+                        <p style="font-size:0.85rem;color:var(--text-dim);margin-bottom:12px;">賽後測量數據</p>
+                        <div class="input-row-3">
+                            <div class="input-group">
+                                <label>賽後體重 (kg)</label>
+                                <input type="number" id="calcPostWeight" placeholder="65" step="0.1" oninput="calculate()">
+                            </div>
+                            <div class="input-group">
+                                <label>賽後體脂率 (%)</label>
+                                <input type="number" id="calcPostFat" placeholder="18" step="0.1" oninput="calculate()">
+                            </div>
+                            <div class="input-group">
+                                <label>賽後骨骼肌量 (kg)</label>
+                                <input type="number" id="calcPostMuscle" placeholder="32" step="0.1" oninput="calculate()">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="result-panel" id="resultPanel">
+                        <div style="text-align:center;padding:40px 0;color:var(--text-dim);">請輸入初始數據開始計算</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Examples -->
+    <section>
+        <div class="container">
+            <h2 class="section-title">計分<span>案例詳解</span></h2>
+            <div class="examples-grid">
+
+                <!-- Case 1: Male -->
+                <div class="example-card">
+                    <span class="tag tag-green">♂ 新手蜜月期</span>
+                    <h4>案例一：體脂較高的新手選手</h4>
+                    <div class="stats">
+                        <div>體重 90 kg ／ 體脂 30%（27 kg）／ 骨骼肌 30%（27 kg）</div>
+                        <div>脂肪門檻（♂）：25% = 22.5 kg ｜ 肌肉門檻（♂）：35% = 31.5 kg</div>
+                        <div>結果：脂肪 -6 kg、骨骼肌 +2 kg</div>
+                    </div>
+                    <div class="calc-detail">
+                        <strong style="color:var(--red);">脂肪分段：</strong>27 → 21 kg<br>
+                        27→22.5：4.5kg 在 ≥25% 區 → 4.5×1.0 = 4.5<br>
+                        22.5→21：1.5kg 在 20~25% 區 → 1.5×1.5 = 2.25<br>
+                        脂肪小計 = <strong>6.75</strong><br><br>
+                        <strong style="color:var(--green);">肌肉分段：</strong>27 → 29 kg<br>
+                        全落在 &lt;35% 區 → 2×1.0 = <strong>2.0</strong><br><br>
+                        總分：(2.0 × 4) + 6.75
+                    </div>
+                    <div class="final-score score-pos">= 14.75 分</div>
+                    <div class="comment">新手紅利大爆發！雖然單位積分較低，但憑藉巨大的進步量，總得分非常驚人。</div>
+                </div>
+
+                <!-- Case 2: Male -->
+                <div class="example-card">
+                    <span class="tag tag-blue">♂ 規律運動者</span>
+                    <h4>案例二：阿明（穩定雕塑、挑戰新低）</h4>
+                    <div class="stats">
+                        <div>體重 60 kg ／ 體脂 22%（13.2 kg）／ 骨骼肌 36%（21.6 kg）</div>
+                        <div>脂肪門檻（♂）：20% = 12 kg ｜ 肌肉門檻（♂）：35% = 21 kg、40% = 24 kg</div>
+                        <div>結果：脂肪 -2 kg、骨骼肌 +1 kg</div>
+                    </div>
+                    <div class="calc-detail">
+                        <strong style="color:var(--red);">脂肪分段：</strong>13.2 → 11.2 kg（跨越 12 kg 門檻）<br>
+                        13.2→12：1.2kg 在 20~25% 區 → 1.2×1.5 = 1.8<br>
+                        12→11.2：0.8kg 在 15~20% 區 → 0.8×1.8 = 1.44<br>
+                        脂肪小計 = <strong>3.24</strong><br><br>
+                        <strong style="color:var(--green);">肌肉分段：</strong>21.6 → 22.6 kg<br>
+                        全落在 35~40% 區 → 1×1.5 = <strong>1.5</strong><br><br>
+                        總分：(1.5 × 4) + 3.24
+                    </div>
+                    <div class="final-score score-pos">= 9.24 分</div>
+                    <div class="comment">成功突破 20% 體脂門檻拿到 1.8 倍計分，加上不錯的肌肉底子落在第二階（1.5 倍），分數扎實漂亮！</div>
+                </div>
+
+                <!-- Case 3: Male -->
+                <div class="example-card">
+                    <span class="tag tag-purple">♂ 高階進階者</span>
+                    <h4>案例三：猛男（逼近極限、寸步難行）</h4>
+                    <div class="stats">
+                        <div>體重 80 kg ／ 體脂 12%（9.6 kg）／ 骨骼肌 41%（32.8 kg）</div>
+                        <div>脂肪門檻（♂）：15% = 12 kg ｜ 肌肉門檻（♂）：40% = 32 kg</div>
+                        <div>結果：脂肪 -0.5 kg、骨骼肌 +0.5 kg</div>
+                    </div>
+                    <div class="calc-detail">
+                        <strong style="color:var(--red);">脂肪分段：</strong>9.6 → 9.1 kg<br>
+                        全落在 &lt;15% 區 → 0.5×2.0 = <strong>1.0</strong><br><br>
+                        <strong style="color:var(--green);">肌肉分段：</strong>32.8 → 33.3 kg<br>
+                        全落在 ≥40% 區 → 0.5×2.0 = <strong>1.0</strong><br><br>
+                        總分：(1.0 × 4) + 1.0
+                    </div>
+                    <div class="final-score score-pos">= 5.0 分</div>
+                    <div class="comment">可進步空間極小，但每一分都是 2 倍頂級積分。這 5 分代表極高的自律與科學化訓練成果。</div>
+                </div>
+
+                <!-- Case 4: Male -->
+                <div class="example-card warning">
+                    <span class="tag tag-red">♂ 反面教材</span>
+                    <h4>案例四：小明（極端節食、全面崩盤）</h4>
+                    <div class="stats">
+                        <div>體重 70 kg ／ 體脂 24%（16.8 kg）／ 骨骼肌 36%（25.2 kg）</div>
+                        <div>脂肪門檻（♂）：25% = 17.5 kg ｜ 肌肉門檻（♂）：35% = 24.5 kg</div>
+                        <div>結果：脂肪 +2 kg、骨骼肌 -1.5 kg</div>
+                    </div>
+                    <div class="calc-detail">
+                        <strong style="color:var(--red);">脂肪分段：</strong>16.8 → 18.8 kg（反彈跨越 17.5 kg 門檻）<br>
+                        16.8→17.5：0.7kg 在 20~25% 區 → 0.7×(-1.5) = -1.05<br>
+                        17.5→18.8：1.3kg 在 ≥25% 區 → 1.3×(-1.0) = -1.3<br>
+                        脂肪小計 = <strong style="color:var(--red);">-2.35</strong><br><br>
+                        <strong style="color:var(--green);">肌肉分段：</strong>25.2 → 23.7 kg（流失跨越 24.5 kg 門檻）<br>
+                        25.2→24.5：0.7kg 在 35~40% 區 → 0.7×(-1.5) = -1.05<br>
+                        24.5→23.7：0.8kg 在 &lt;35% 區 → 0.8×(-1.0) = -0.8<br>
+                        肌肉小計 = <strong style="color:var(--red);">-1.85</strong><br><br>
+                        總分：(-1.85 × 4) + (-2.35)
+                    </div>
+                    <div class="final-score score-neg">= -9.75 分</div>
+                    <div class="comment">肌肉 4 倍加權非常殘酷！流失的肌肉被放大 4 倍，跨階梯退步雪上加霜。完美體現「千萬不要用流失肌肉的方式來減重」。</div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">2026 增肌減脂極限挑戰賽 — 階梯式加權計分法（分段算分制・男女分級）</div>
+    </footer>
+
+    <script>
+        function r2(n) { return parseFloat(n.toFixed(2)); }
+
+        // Gender-specific thresholds:
+        // Male fat:   25%, 20%, 15%   | Female fat:   33%, 28%, 23%
+        // Male muscle: 35%, 40%       | Female muscle: 28%, 33%
+
+        function getSegmentedFatScore(initFat, postFat, initWeight, gender) {
+            const isFemale = gender === 'F';
+            const pct1 = isFemale ? 0.32 : 0.25;
+            const pct2 = isFemale ? 0.25 : 0.20;
+            const pct3 = isFemale ? 0.20 : 0.15;
+            const t1 = r2(initWeight * pct1);
+            const t2 = r2(initWeight * pct2);
+            const t3 = r2(initWeight * pct3);
+            const l1 = isFemale ? '≥32%' : '≥25%';
+            const l2 = isFemale ? '25~32%' : '20~25%';
+            const l3 = isFemale ? '20~25%' : '15~20%';
+            const l4 = isFemale ? '<20%' : '<15%';
+            const zones = [
+                { min: t1, max: 9999, rate: 1.0, label: l1 },
+                { min: t2, max: t1,   rate: 1.5, label: l2 },
+                { min: t3, max: t2,   rate: 1.8, label: l3 },
+                { min: 0,  max: t3,   rate: 2.0, label: l4 },
+            ];
+            const isLoss = initFat > postFat;
+            const lo = Math.min(initFat, postFat);
+            const hi = Math.max(initFat, postFat);
+            const ordered = isLoss ? zones : [...zones].reverse();
+            let segments = [], total = 0;
+            for (const z of ordered) {
+                const oLo = Math.max(lo, z.min), oHi = Math.min(hi, z.max);
+                if (oLo < oHi) {
+                    const amt = r2(oHi - oLo);
+                    const dir = isLoss ? 1 : -1;
+                    const score = r2(amt * z.rate * dir);
+                    const from = isLoss ? oHi : oLo;
+                    const to = isLoss ? oLo : oHi;
+                    segments.push({ from: r2(from), to: r2(to), amt, rate: z.rate, score, label: z.label });
+                    total += score;
+                }
+            }
+            const pctLabels = isFemale ? ['32%', '25%', '20%'] : ['25%', '20%', '15%'];
+            return { total: r2(total), segments, thresholds: { t1, t2, t3 }, pctLabels };
+        }
+
+        function getSegmentedMuscleScore(initMuscle, postMuscle, initWeight, gender) {
+            const isFemale = gender === 'F';
+            const pctA = isFemale ? 0.28 : 0.35;
+            const pctB = isFemale ? 0.34 : 0.40;
+            const t1 = r2(initWeight * pctA);
+            const t2 = r2(initWeight * pctB);
+            const lA = isFemale ? '<28%' : '<35%';
+            const lB = isFemale ? '28~34%' : '35~40%';
+            const lC = isFemale ? '≥34%' : '≥40%';
+            const zones = [
+                { min: 0,  max: t1, rate: 1.0, label: lA },
+                { min: t1, max: t2, rate: 1.5, label: lB },
+                { min: t2, max: 9999, rate: 2.0, label: lC },
+            ];
+            const isGain = postMuscle > initMuscle;
+            const lo = Math.min(initMuscle, postMuscle);
+            const hi = Math.max(initMuscle, postMuscle);
+            const ordered = isGain ? zones : [...zones].reverse();
+            let segments = [], total = 0;
+            for (const z of ordered) {
+                const oLo = Math.max(lo, z.min), oHi = Math.min(hi, z.max);
+                if (oLo < oHi) {
+                    const amt = r2(oHi - oLo);
+                    const dir = isGain ? 1 : -1;
+                    const score = r2(amt * z.rate * dir);
+                    const from = isGain ? oLo : oHi;
+                    const to = isGain ? oHi : oLo;
+                    segments.push({ from: r2(from), to: r2(to), amt, rate: z.rate, score, label: z.label });
+                    total += score;
+                }
+            }
+            const pctLabels = isFemale ? ['28%', '34%'] : ['35%', '40%'];
+            return { total: r2(total), segments, thresholds: { t1, t2 }, pctLabels };
+        }
+
+        function calculate() {
+            const name = document.getElementById('calcName').value || '參賽者';
+            const gender = document.querySelector('input[name="calcGender"]:checked')?.value || 'M';
+            const genderLabel = gender === 'F' ? '♀' : '♂';
+            const weight = parseFloat(document.getElementById('calcWeight').value);
+            const fatPct = parseFloat(document.getElementById('calcFat').value);
+            const muscle = parseFloat(document.getElementById('calcMuscle').value);
+            const postW = parseFloat(document.getElementById('calcPostWeight').value);
+            const postFatPct = parseFloat(document.getElementById('calcPostFat').value);
+            const postM = parseFloat(document.getElementById('calcPostMuscle').value);
+            const panel = document.getElementById('resultPanel');
+
+            if (isNaN(weight) || isNaN(fatPct) || isNaN(muscle) || weight <= 0) {
+                panel.innerHTML = '<div style="text-align:center;padding:40px 0;color:var(--text-dim);">請輸入初始數據開始計算</div>';
+                return;
+            }
+
+            const initFat = r2(weight * fatPct / 100);
+            const muscleRatio = r2(muscle / weight * 100);
+
+            // Get thresholds for display (using gender)
+            const isFemale = gender === 'F';
+            const fatPcts = isFemale ? ['32%', '25%', '20%'] : ['25%', '20%', '15%'];
+            const fatThresholds = isFemale
+                ? [r2(weight*0.32), r2(weight*0.25), r2(weight*0.20)]
+                : [r2(weight*0.25), r2(weight*0.20), r2(weight*0.15)];
+            const musclePcts = isFemale ? ['28%', '34%'] : ['35%', '40%'];
+            const muscleThresholds = isFemale
+                ? [r2(weight*0.28), r2(weight*0.34)]
+                : [r2(weight*0.35), r2(weight*0.40)];
+
+            let html = '';
+            html += `<div class="result-card"><div class="player-name">${genderLabel} ${esc(name)}</div>`;
+            html += `<div class="detail">骨骼肌佔比：${muscleRatio.toFixed(1)}% ｜ 脂肪量：${initFat} kg</div></div>`;
+
+            html += `<div class="result-card"><div class="label">門檻值（${genderLabel} 依初始體重 ${weight} kg 計算）</div>`;
+            html += `<div class="detail" style="font-family:monospace;font-size:0.82rem;line-height:1.9;">`;
+            html += `脂肪：${fatPcts[0]}=${fatThresholds[0]}kg ｜ ${fatPcts[1]}=${fatThresholds[1]}kg ｜ ${fatPcts[2]}=${fatThresholds[2]}kg<br>`;
+            html += `肌肉：${musclePcts[0]}=${muscleThresholds[0]}kg ｜ ${musclePcts[1]}=${muscleThresholds[1]}kg</div></div>`;
+
+            const hasPost = !isNaN(postW) && !isNaN(postFatPct) && !isNaN(postM) && postW > 0;
+            if (!hasPost) {
+                html += '<div style="text-align:center;padding:16px 0;color:var(--text-dim);font-size:0.9rem;">輸入賽後數據以計算成績</div>';
+                panel.innerHTML = html; return;
+            }
+
+            const postFat = r2(postW * postFatPct / 100);
+            const fatResult = getSegmentedFatScore(initFat, postFat, weight, gender);
+            const muscleResult = getSegmentedMuscleScore(muscle, postM, weight, gender);
+
+            // Fat segments
+            html += `<div class="result-card"><div class="label">🔥 脂肪分段計算：${initFat} → ${postFat} kg</div><div class="seg-line">`;
+            for (const s of fatResult.segments) {
+                const sign = s.score >= 0 ? '+' : '';
+                html += `${s.from}→${s.to}：<span class="amt">${s.amt}kg</span> 在 ${s.label} 區 → ${s.amt}×${s.score >= 0 ? '' : '(-'}${s.rate}${s.score >= 0 ? '' : ')'} = <strong style="color:${s.score>=0?'var(--green)':'var(--red)'}">${sign}${s.score}</strong><br>`;
+            }
+            html += `</div><div class="seg-subtotal" style="color:${fatResult.total>=0?'var(--green)':'var(--red)'}">脂肪小計：${fatResult.total>=0?'+':''}${fatResult.total} 分</div></div>`;
+
+            // Muscle segments
+            html += `<div class="result-card"><div class="label">💪 肌肉分段計算：${muscle} → ${postM} kg</div><div class="seg-line">`;
+            for (const s of muscleResult.segments) {
+                const sign = s.score >= 0 ? '+' : '';
+                html += `${s.from}→${s.to}：<span class="amt">${s.amt}kg</span> 在 ${s.label} 區 → ${s.amt}×${s.score >= 0 ? '' : '(-'}${s.rate}${s.score >= 0 ? '' : ')'} = <strong style="color:${s.score>=0?'var(--green)':'var(--red)'}">${sign}${s.score}</strong><br>`;
+            }
+            html += `</div><div class="seg-subtotal" style="color:${muscleResult.total>=0?'var(--green)':'var(--red)'}">肌肉小計：${muscleResult.total>=0?'+':''}${muscleResult.total} 分</div></div>`;
+
+            // Total
+            const totalScore = r2((muscleResult.total * 4) + fatResult.total);
+            const isNeg = totalScore < 0;
+            html += `<div class="total-score ${isNeg ? 'negative' : ''}">`;
+            html += `<div class="label">最終總成績</div>`;
+            html += `<div class="score">${totalScore >= 0 ? '+' : ''}${totalScore}</div>`;
+            html += `<div class="breakdown">(${muscleResult.total} × 4) + ${fatResult.total}</div></div>`;
+
+            panel.innerHTML = html;
+        }
+
+        function esc(t) { const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
+    </script>
+
+</body>
+</html>
